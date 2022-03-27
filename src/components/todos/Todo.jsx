@@ -1,12 +1,26 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { Button } from "../../elem";
+import { deleteTodo } from "../../modules/todos";
 
 const Item = ({ item }) => {
+  const dispatch = useDispatch();
+
   return (
     <StContainer>
       <StId>{item.id}</StId>
       <StItemTitle>{item.title}</StItemTitle>
       <div>{item.desc}</div>
+      <StButton>
+        <Button
+          onClick={() => {
+            dispatch(deleteTodo(item.id));
+          }}
+        >
+          삭제
+        </Button>
+      </StButton>
     </StContainer>
   );
 };
@@ -31,4 +45,9 @@ const StItemTitle = styled.div`
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 5px;
+`;
+
+const StButton = styled.div`
+  margin-top: 80px;
+  text-align: right;
 `;

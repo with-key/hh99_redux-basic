@@ -31,7 +31,7 @@ const StTitle = styled.div`
 `;
 
 const StMain = styled.main`
-  ${flex("center")};
+  ${flex("start")};
   flex-wrap: wrap;
   gap: 12px;
 `;
