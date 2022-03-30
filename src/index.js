@@ -2,17 +2,21 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import ReduxThunk from "redux-thunk";
 
 // 리덕스 관련 코드
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 // 루트 리듀서
 import rootReducer from "./modules";
 
 // 스토어 만들기
-const store = createStore(rootReducer, composeWithDevTools());
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(ReduxThunk))
+);
 
 ReactDOM.render(
   // Provider로 감싸고 스토어 넣어주기

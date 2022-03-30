@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Button, Input } from "../../elem";
 import { flex } from "../style";
 import { useDispatch } from "react-redux";
-import { addTodo } from "../../modules/todos";
+import { addTodo, getDocFB } from "../../modules/todos";
 
 const TodoForm = () => {
   const dispatch = useDispatch();
@@ -32,13 +32,7 @@ const TodoForm = () => {
         <Input name="desc" type="text" onChange={onChangeDescHandler} />
       </StField>
       <StSubmit>
-        <Button
-          onClick={() => {
-            dispatch(addTodo(todo));
-          }}
-        >
-          추가하기
-        </Button>
+        <Button onClick={() => {}}>추가하기</Button>
       </StSubmit>
     </>
   );

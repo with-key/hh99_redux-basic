@@ -1,8 +1,9 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Button } from "../../elem";
-import { deleteTodo } from "../../modules/todos";
+import { deleteTodo, getDocFB, toggleTodoFB } from "../../modules/todos";
 
 const Item = ({ item }) => {
   const dispatch = useDispatch();
@@ -12,10 +13,18 @@ const Item = ({ item }) => {
       <StId>{item.id}</StId>
       <StItemTitle>{item.title}</StItemTitle>
       <div>{item.desc}</div>
+      <div
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          dispatch(toggleTodoFB(item));
+        }}
+      >
+        {item.done ? "✅" : "❌"}
+      </div>
       <StButton>
         <Button
           onClick={() => {
-            dispatch(deleteTodo(item.id));
+            // dispatch(deleteTodo(item.id));
           }}
         >
           삭제
@@ -28,12 +37,9 @@ const Item = ({ item }) => {
 export default Item;
 
 const StContainer = styled.div`
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 25%;
-  height: 200px;
-  padding: 12px;
-`;
+  border: 1px solid red;
+  padding: 10px;
+`; // html 스타일링
 
 const StId = styled.div`
   margin-bottom: 10px;
