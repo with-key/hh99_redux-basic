@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Button, Input } from "../../elem";
 import { flex } from "../style";
-import { useDispatch } from "react-redux";
-import { addTodo, getDocFB } from "../../modules/todos";
 
 const TodoForm = () => {
-  const dispatch = useDispatch();
   const [todo, setTodo] = useState({
     title: "",
     desc: "",

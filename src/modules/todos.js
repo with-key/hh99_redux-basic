@@ -1,19 +1,46 @@
-import { toBeInvalid } from "@testing-library/jest-dom/dist/matchers";
 import axios from "axios";
 
 let id = 4;
 
 // Action :: 이 모듈에서 일어날 수 있는 액션
-const LOAD_TODO = "todos/LOAD_TODO";
+const LOAD_TODOS_REQ = "todos/LOAD_TODOS_REQ";
+const LOAD_TODOS_SUCCESS = "todos/LOAD_TODOS_SUCCESS";
+const LOAD_TODOS_ERROR = "todos/LOAD_TODOS_ERROR";
+
 const ADD_TODO = "todos/ADD_TODO";
 const DELETE_TODO = "todos/DELETE_TODO";
 const TOGGLEE_TODO = "todos/TOGGLEE_TODO";
 
-const loadCards = (todos) => {
+// 액션크리에이터
+const loadTodosReq = () => {
   return {
-    type: LOAD_TODO,
-    todos,
+    type: LOAD_TODOS_REQ,
   };
+};
+
+const loadTodosSuccess = (payload) => {
+  return {
+    type: LOAD_TODOS_SUCCESS,
+    payload,
+  };
+};
+
+const loadTodosError = (error) => {
+  return {
+    type: LOAD_TODOS_ERROR,
+    error: error,
+  };
+};
+
+export const __loadTodos = () => async (dispatch, getState) => {
+  try {
+    dispatch(loadTodosReq());
+    const { data } = await axios.get("http://localhost:3001/todos");
+    dispatch(loadTodosSuccess(data));
+  } catch (error) {
+    alert("에러가 발생했습니다. 다시 접속해주세요.");
+    dispatch(loadTodosError(error));
+  }
 };
 
 const toggleTodo = (data) => {
@@ -23,17 +50,10 @@ const toggleTodo = (data) => {
   };
 };
 
-export const loadCardsFB = () => async (dispatch, getState) => {
-  // 파이어베이스에서 꺼내오기
-  const { data } = await axios.get("http://localhost:3001/todos");
-  // 내 스토어에 넣기
-  dispatch(loadCards(data));
-  return data;
-};
-
 // 성크함수
 export const toggleTodoFB = (todo) => async (dispatch, getState) => {
   // done을 거꾸로 바꾸는 가공
+
   const updatedTodo = {
     ...todo,
     done: !todo.done,
@@ -65,14 +85,27 @@ export const deleteTodo = (payload) => {
 // Initial State :: 이 모듈의 스토어 초기 값을 설정해주는 애
 const initialState = {
   todos: [],
+  isLoading: false,
 };
 
 // Reducer : 액션 받아서 액션에 따라 스토어 값을 바꿔주는 애
 const todos = (state = initialState, action) => {
   switch (action.type) {
-    case LOAD_TODO:
+    case LOAD_TODOS_REQ:
       return {
-        todos: action.todos,
+        ...state,
+        isLoading: true,
+      };
+    case LOAD_TODOS_SUCCESS:
+      return {
+        ...state,
+        todos: action.payload,
+        isLoading: false,
+      };
+    case LOAD_TODOS_ERROR:
+      return {
+        ...state,
+        isLoading: false,
       };
     case ADD_TODO:
       id++;

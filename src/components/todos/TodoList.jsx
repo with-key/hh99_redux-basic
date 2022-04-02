@@ -1,25 +1,38 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import styled from "styled-components";
-import { loadCardsFB } from "../../modules/todos";
+import { __loadTodos } from "../../modules/todos";
 import { flex } from "../style";
-import Todo from "./Todo";
 
 const TodoList = () => {
   const dispatch = useDispatch();
   const todos = useSelector(({ todos }) => todos.todos);
+  const history = useHistory();
+
+  const [number, setNumber] = useState(0);
 
   useEffect(() => {
-    dispatch(loadCardsFB());
-  }, []);
+    dispatch(__loadTodos());
+  }, [dispatch]);
 
   return (
     <StContainer>
       <StTitle>예상기님의 Todo List</StTitle>
       <StMain>
-        {todos.map((item) => (
-          <Todo key={item.id} item={item} />
-        ))}
+        {todos &&
+          todos.map((item) => (
+            <StBox
+              todo={item}
+              key={item.id}
+              onClick={() => {
+                history.push(`/todos/${item.id}`);
+              }}
+            >
+              {item.title}
+            </StBox>
+          ))}
       </StMain>
     </StContainer>
   );
@@ -41,4 +54,15 @@ const StMain = styled.main`
   ${flex("start")};
   flex-wrap: wrap;
   gap: 12px;
+`;
+
+const StLink = styled(Link)`
+  text-decoration: none;
+`;
+
+const StBox = styled.div`
+  ${flex()}
+  width: 100px;
+  height: 100px;
+  border: 1px solid purple;
 `;

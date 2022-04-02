@@ -12,6 +12,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 // 루트 리듀서
 import rootReducer from "./modules";
 
+// router config
+import { BrowserRouter } from "react-router-dom";
+
 // 스토어 만들기
 const store = createStore(
   rootReducer,
@@ -21,7 +24,9 @@ const store = createStore(
 ReactDOM.render(
   // Provider로 감싸고 스토어 넣어주기
   <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </Provider>,
   document.getElementById("root")
 );
