@@ -7,7 +7,45 @@ const LOAD_TODOS_REQ = "todos/LOAD_TODOS_REQ";
 const LOAD_TODOS_SUCCESS = "todos/LOAD_TODOS_SUCCESS";
 const LOAD_TODOS_ERROR = "todos/LOAD_TODOS_ERROR";
 
-const ADD_TODO = "todos/ADD_TODO";
+// 추가하기
+const ADD_TODO_REQ = "todos/ADD_TODO";
+const ADD_TODO_SUCCESS = "todos/ADD_TODO_SUCCESS";
+const ADD_TODO_ERROR = "todos/ADD_TODO_ERROR";
+
+const addTodoReq = () => {
+  return {
+    type: ADD_TODO_REQ,
+  };
+};
+
+const addTodoSuccess = (todo) => {
+  return {
+    type: ADD_TODO_SUCCESS,
+    todo,
+  };
+};
+
+const addTodoError = () => {
+  return {
+    type: ADD_TODO_ERROR,
+  };
+};
+
+export const __addTodo = () => async (dispatch, getState) => {
+  // 네트워크 요청 로직
+  try {
+    dispatch(addTodoReq());
+    const data = await axios.post("http://localhost:3001/", todos, {});
+    console.log(data);
+    dispatch(addTodoSuccess());
+  } catch (에러) {
+    alert("네트워크 요청에 실패했습니다.");
+    dispatch(addTodoError(에러));
+  }
+
+  // 리덕스에 넣는 로직
+};
+
 const DELETE_TODO = "todos/DELETE_TODO";
 const TOGGLEE_TODO = "todos/TOGGLEE_TODO";
 
@@ -35,7 +73,7 @@ const loadTodosError = (error) => {
 export const __loadTodos = () => async (dispatch, getState) => {
   try {
     dispatch(loadTodosReq());
-    const { data } = await axios.get("http://localhost:3001/todos");
+    const { data } = await axios.get("http://localhost:3001/todos", {});
     dispatch(loadTodosSuccess(data));
   } catch (error) {
     alert("에러가 발생했습니다. 다시 접속해주세요.");
@@ -71,7 +109,7 @@ export const toggleTodoFB = (todo) => async (dispatch, getState) => {
 
 // Action Creator :: 액션을 만들어 주는 애 (액션은 반드시 'type'과 'payload'를 가진 객체다.)
 export const addTodo = (payload) => ({
-  type: ADD_TODO,
+  type: ADD_TODO_REQ,
   payload: { ...payload, id }, // 밖에 나가서 정보를 받아올 주머니 (직역하면, '탑재 화물')
 });
 
@@ -107,11 +145,7 @@ const todos = (state = initialState, action) => {
         ...state,
         isLoading: false,
       };
-    case ADD_TODO:
-      id++;
-      return {
-        todos: [...state.todos, action.payload],
-      };
+
     case DELETE_TODO:
       return {
         todos: state.todos.filter((todo) => todo.id !== action.payload),
