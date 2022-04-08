@@ -40,13 +40,14 @@ export const clearTodo = () => {
 };
 
 // Thunk Fn
-export const __loadTodo = (id) => async (dispatch, getState) => {
+export const __loadTodo = (id, code) => async (dispatch, getState) => {
   try {
     dispatch(loadTodoReq());
-    const { data } = await axios.get(
-      // `${process.env.REACT_APP_API_URL}/todos/${id}
-      `http://localhost:3001/todos/${id}`
-    );
+    const { data } = await axios.get(`http://localhost:3001/todos/${id}`, {
+      params: {
+        code: code,
+      },
+    });
     dispatch(loadTodoSuccess(data));
   } catch (error) {
     alert("에러가 발생했습니다. 잠시후에 다시 접속해주세요.");

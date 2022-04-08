@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { Button, Input } from "../../elem";
+import { __addTodo } from "../../modules/todos";
 import { flex } from "../style";
 
 const TodoForm = () => {
+  const dispatch = useDispatch();
   const [todo, setTodo] = useState({
     title: "",
     desc: "",
@@ -29,7 +32,13 @@ const TodoForm = () => {
         <Input name="desc" type="text" onChange={onChangeDescHandler} />
       </StField>
       <StSubmit>
-        <Button onClick={() => {}}>추가하기</Button>
+        <Button
+          onClick={() => {
+            dispatch(__addTodo());
+          }}
+        >
+          추가하기
+        </Button>
       </StSubmit>
     </>
   );
