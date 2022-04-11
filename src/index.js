@@ -2,7 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import ReduxThunk from "redux-thunk";
+import thunk from "redux-thunk";
+import { history } from "./modules";
 
 // 리덕스 관련 코드
 import { Provider } from "react-redux";
@@ -18,7 +19,7 @@ import { BrowserRouter } from "react-router-dom";
 // 스토어 만들기
 const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(ReduxThunk))
+  composeWithDevTools(applyMiddleware(thunk.withExtraArgument({ history })))
 );
 
 ReactDOM.render(
